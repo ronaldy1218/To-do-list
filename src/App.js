@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,12 +13,16 @@ const todoDayRef = useRef()
 const todoMonthRef = useRef()
 const todoYearRef = useRef()
 
-useMemo(() => {
+useEffect(() => {
   const heading = document.getElementById("headerContainer")
   const congrat = document.querySelector("h2")
-  if (todos.length === 0 && heading !== null) {
-    heading.remove()
+  if (todos.length === 0) {
     congrat.style.display = "block"
+    heading.style.display = "none"
+  }
+  else {
+    congrat.style.display = "none"
+    heading.style.display = "flex"
   }
 }, [todos])
 
@@ -53,27 +57,6 @@ function handleAddTodo(e) {
   todoDayRef.current.value = "Day";
   todoMonthRef.current.value = "Month";
   todoYearRef.current.value = "Year";
-
-  const content = document.getElementById("content")
-  const heading = document.createElement("div")
-  heading.setAttribute("id", "headerContainer")
-  content.appendChild(heading)
-
-  const nameHeader = document.createElement("div")
-  nameHeader.setAttribute("id", "nameHeader")
-  nameHeader.innerHTML = "Item Name"
-
-  const deadlineHeader = document.createElement("div")
-  deadlineHeader.setAttribute("id", "deadlineHeader")
-  deadlineHeader.innerHTML = "Deadline(DD/MM/YYYY)"
-  
-  const congrat = document.querySelector("h2")
-
-  if (todos.length === 0) {
-    heading.appendChild(nameHeader)
-    heading.appendChild(deadlineHeader)
-    congrat.style.display = "none"
-  }
 }
 
 function handleClearTodo() {
@@ -161,10 +144,10 @@ function handleClearTodo() {
         <button onClick={handleAddTodo}>Add new item</button>
         <button onClick={handleClearTodo}>Clear Completed Task</button>
       </div>
-      <div id="content">
-        <div>
-          <div></div>
-          <div></div>
+      <div>
+        <div id="headerContainer">
+          <div id="nameHeader">Item Name</div>
+          <div id="deadlineHeader">Deadline(DD/MM/YYYY)</div>
         </div>
         <TodoList todos={todos} toggleTodo={toggleTodo}/>
       </div>
