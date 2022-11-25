@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import './App.css';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,9 +13,18 @@ const todoDayRef = useRef()
 const todoMonthRef = useRef()
 const todoYearRef = useRef()
 
+useMemo(() => {
+  const heading = document.getElementById("headerContainer")
+  const congrat = document.querySelector("h2")
+  if (todos.length === 0 && heading !== null) {
+    heading.remove()
+    congrat.style.display = "block"
+  }
+}, [todos])
+
 useEffect(() => {
   const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-  if(storedTodos) setTodos(prevTodos => [...prevTodos, ...storedTodos])
+  setTodos(prevTodos => [...prevTodos, ...storedTodos])
 }, [])
 
 useEffect(() => {
@@ -44,6 +53,27 @@ function handleAddTodo(e) {
   todoDayRef.current.value = "Day";
   todoMonthRef.current.value = "Month";
   todoYearRef.current.value = "Year";
+
+  const content = document.getElementById("content")
+  const heading = document.createElement("div")
+  heading.setAttribute("id", "headerContainer")
+  content.appendChild(heading)
+
+  const nameHeader = document.createElement("div")
+  nameHeader.setAttribute("id", "nameHeader")
+  nameHeader.innerHTML = "Item Name"
+
+  const deadlineHeader = document.createElement("div")
+  deadlineHeader.setAttribute("id", "deadlineHeader")
+  deadlineHeader.innerHTML = "Deadline(DD/MM/YYYY)"
+  
+  const congrat = document.querySelector("h2")
+
+  if (todos.length === 0) {
+    heading.appendChild(nameHeader)
+    heading.appendChild(deadlineHeader)
+    congrat.style.display = "none"
+  }
 }
 
 function handleClearTodo() {
@@ -131,13 +161,19 @@ function handleClearTodo() {
         <button onClick={handleAddTodo}>Add new item</button>
         <button onClick={handleClearTodo}>Clear Completed Task</button>
       </div>
-      <TodoList todos={todos} toggleTodo={toggleTodo}/>
-      <div>You have {todos.filter(todo => !todo.complete).length} things left to do</div>
-      <br></br>
+      <div id="content">
+        <div>
+          <div></div>
+          <div></div>
+        </div>
+        <TodoList todos={todos} toggleTodo={toggleTodo}/>
+      </div>
+      <div id="numberOfThings">You have {todos.filter(todo => !todo.complete).length} things left to do</div>
+      <h2>Congratulation!</h2>
+      <br />
       <footer>By Ronald Yun</footer>
     </div>
   )
 }
-
 
 export default App;

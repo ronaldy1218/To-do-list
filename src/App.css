@@ -71,6 +71,28 @@ button:active {
     outline: none;
 }
 
-#returnItem {
+#headerContainer { 
     display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 22px;
+
 }
+
+#itemComponent {
+    display: grid;
+    grid-template-columns: 30px 400px 190px;
+    font-size: 25px;
+    margin-top: 20px;
+    column-gap: 20px;
+}   
+
+#todoDate {
+    text-align: end;
+}
+
+#numberOfThings {
+    margin: 20px;
+    font-size: 22px;
+}
+
