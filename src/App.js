@@ -1,14 +1,33 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import TodoList from './TodoList';
+import { v4 as uuidv4 } from 'uuid';
+
+const LOCAL_STORAGE_KEY = "todoApp.todos"
 
 function App() {
 
-const [todos, setTodos] =  useState(["Todo1", "todo2"])
+const [todos, setTodos] =  useState([])
 const todoNameRef = useRef()
 const todoDayRef = useRef()
 const todoMonthRef = useRef()
 const todoYearRef = useRef()
+
+useEffect(() => {
+  const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+  if(storedTodos) setTodos(prevTodos => [...prevTodos, ...storedTodos])
+}, [])
+
+useEffect(() => {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos))
+}, [todos])
+
+function toggleTodo(id) {
+  const newTodos = [...todos]
+  const todo = newTodos.find(todo => todo.id === id)
+  todo.complete = !todo.complete
+  setTodos(newTodos)
+}
 
 function handleAddTodo(e) {
   const name = todoNameRef.current.value
@@ -18,7 +37,20 @@ function handleAddTodo(e) {
   if (name === "" || day === "Day" || month === "Month" || year === "Year") {
     return alert("Item name or Expected completion date is missing!")
   }
-  console.log(name, day, month, year)
+  setTodos(prevTodos => {
+    return [...prevTodos, {id: uuidv4(), name: name, complete: false, day: day, month: month, year: year}]
+  })
+  todoNameRef.current.value = null;
+  todoDayRef.current.value = "Day";
+  todoMonthRef.current.value = "Month";
+  todoYearRef.current.value = "Year";
+}
+
+function handleClearTodo() {
+  const newTodos = todos.filter(todo => !todo.complete)
+  const completedTodos = todos.filter(todo => todo.complete)
+  if (completedTodos.length === 0) alert("You have no completed item. Let's get to work!")
+  setTodos(newTodos)
 }
 
   return (
@@ -97,10 +129,10 @@ function handleAddTodo(e) {
       </form>
       <div>
         <button onClick={handleAddTodo}>Add new item</button>
-        <button>Clear Completed Task</button>
+        <button onClick={handleClearTodo}>Clear Completed Task</button>
       </div>
-      <TodoList todos={todos}/>
-      <div>You have 0 things left to do</div>
+      <TodoList todos={todos} toggleTodo={toggleTodo}/>
+      <div>You have {todos.filter(todo => !todo.complete).length} things left to do</div>
       <br></br>
       <footer>By Ronald Yun</footer>
     </div>
