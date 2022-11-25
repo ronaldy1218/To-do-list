@@ -140,11 +140,11 @@ function handleClearTodo() {
             <option value="2030+">2030+</option>
           </select>
       </form>
-      <div>
+      <div id="buttons">
         <button onClick={handleAddTodo}>Add new item</button>
         <button onClick={handleClearTodo}>Clear Completed Task</button>
       </div>
-      <div>
+      <div id="itemList">
         <div id="headerContainer">
           <div id="nameHeader">Item Name</div>
           <div id="deadlineHeader">Deadline(DD/MM/YYYY)</div>

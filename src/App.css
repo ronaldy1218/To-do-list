@@ -23,7 +23,6 @@ h1 {
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    background-color: transparent;
 }
 
 #input {
@@ -41,6 +40,7 @@ h1 {
     height: 4rem;
     border: 0;
     border-radius: 50px;
+    font-size: 18px;
 }
 
 #frame {
@@ -96,3 +96,71 @@ button:active {
     font-size: 22px;
 }
 
+@media (max-width: 700px) {
+    #frame {
+        width: 80%;
+        display: flex;
+        align-items: center;
+    }
+    #itemList {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+    }
+    #itemComponent {
+
+        grid-template-columns: 30px auto auto;
+        font-size: 25px;
+        margin-top: 20px;
+        column-gap: 20px;
+    }   
+}
+
+@media (max-width: 650px) {
+    #frame {
+        display: grid;
+        grid-template-columns: 120px 120px 120px;
+        grid-row: auto auto;
+        justify-content: center;
+    }
+    #input {
+        grid-column: 1/ span 3;
+        text-align: center;
+        width: auto;
+    }
+}
+
+@media (max-width: 550px) {
+    #headerContainer {
+        font-size: 18px;
+    }
+    #itemComponent {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 450px) {
+    #frame {
+        display: flex;
+        flex-direction: column;
+        background-color: transparent;
+    }
+    #input {
+        text-align: center;
+        width: auto;
+        background-color: transparent;
+    }
+    #day, #month, #year {
+        font-size: 18px;
+    }
+    #buttons {
+        display: flex;
+        flex-direction: column;
+    }
+    #numberOfThings {
+        font-size: 8px;
+    }
+    #headerContainer {
+        font-size: 14px;
+    }
+}
